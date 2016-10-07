@@ -164,7 +164,7 @@ function echarts_load_net(){
             backgroundColor: '#30536f',
         
         title : {
-            text: 'MySQL SLAVE DELAY Top10',
+            text: 'Network Top10',
             subtext: '',
             x: 'center',
             textStyle: {
@@ -179,7 +179,7 @@ function echarts_load_net(){
         
         },
         legend: {
-            data:['delay'],
+            data:['Bytes'],
             x: 'left',
             textStyle: {
                 fontSize: 8, 
@@ -221,7 +221,8 @@ function echarts_load_net(){
                 type : 'value',
                 splitArea : {show : true},
                 axisLabel : {
-                    textStyle: {
+                    formatter: '{value}KB',
+                    textStyle: { 
                         color:'#FFFFFF',
                     }
                 }
@@ -229,7 +230,7 @@ function echarts_load_net(){
         ],
         series : [
             {
-                name:'delay',
+                name:'Bytes',
                 type:'bar',
                 itemStyle: {
                     normal: {
@@ -253,7 +254,7 @@ function echarts_load_net(){
         success:function(result){
             if(result){
                 options_net.xAxis[0].data = result.category;
-                options_net.series[0].data=result.series.delay;
+                options_net.series[0].data=result.series.bytes;
            
                 myChart_net.setOption(options_net);
             }
@@ -286,7 +287,7 @@ function echarts_load_io(){
             backgroundColor: '#30536f',
         
         title : {
-            text: 'Thread running Top10',
+            text: 'Disk IO Top10',
             subtext: '',
             x: 'center',
             textStyle: {
@@ -301,7 +302,7 @@ function echarts_load_io(){
         
         },
         legend: {
-            data:['Thread_running'],
+            data:['Writes','Reads'],
             x: 'left',
             textStyle: {
                 fontSize: 8, 
@@ -331,10 +332,9 @@ function echarts_load_io(){
                 data : ['a','b'],
                 name : '',
                 axisLabel : {
-                    rotate: '20',
-                    textStyle: {
-                     fontSize: 4,
-                     color:'#FFFFFF',
+                    rotate: '45',
+                    textStyle: { 
+                        color:'#FFFFFF',
                     }
                 }
             }
@@ -352,7 +352,7 @@ function echarts_load_io(){
         ],
         series : [
             {
-                name:'Thread_running',
+                name:'Writes',
                 type:'bar',
                 itemStyle: {
                     normal: {
@@ -361,6 +361,18 @@ function echarts_load_io(){
                     
                 },
                 data:[1,2]
+            },
+            
+            {
+                name:'Reads',
+                type:'bar',
+                itemStyle: {
+                    normal: {
+                        color: '#CCCC00',
+                    },
+                    
+                },
+                data:[3,4]
             },
            
         ]
@@ -374,7 +386,8 @@ function echarts_load_io(){
         success:function(result){
             if(result){
                 options_io.xAxis[0].data = result.category;
-                options_io.series[0].data=result.series.threads_running;
+                options_io.series[0].data=result.series.io_writes;
+                options_io.series[1].data=result.series.io_reads;
                 myChart_io.setOption(options_io);
             }
             

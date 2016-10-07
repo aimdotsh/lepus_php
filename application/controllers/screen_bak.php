@@ -61,16 +61,17 @@ group by ip order by cpu_idle_time asc limit 10;")->result_array();
 
 
    function ajax_get_net(){
-         $data = $this->db->query("select concat (substring_index(os.host,'.',-2),':', os.port) tags,TRUNCATE(avg(his.delay),0) delay
-FROM mysql_replication_history  his
-JOIN db_servers_mysql os ON his.host=os.host and his.port=os.port
-WHERE his.create_time>=ADDDATE(NOW(),INTERVAL -5 MINUTE) and his.is_slave='1' and delay is not null
+         $data = $this->db->query("select os.tags,TRUNCATE(avg(his.in_bytes+his.out_bytes)/1024,0) bytes
+FROM os_net_history  his
+JOIN db_servers_os os ON his.ip=os.host 
+WHERE his.create_time>=ADDDATE(NOW(),INTERVAL -5 MINUTE)
 GROUP BY os.tags
-ORDER BY delay DESC limit 10")->result_array();
+ORDER BY bytes DESC limit 10")->result_array();
          $result = array();
          foreach($data as $item){
                 $result['category'][] = $item['tags'];
-                $result['series']['delay'][] = $item['delay'];
+                $result['series']['bytes'][] = $item['bytes'];
+              
          }
          $php_json = json_encode($result); 
          print_r($php_json) ;
@@ -79,17 +80,17 @@ ORDER BY delay DESC limit 10")->result_array();
 
 
     function ajax_get_diskio(){
-         $data = $this->db->query("select concat (substring_index(os.host,'.',-2),':', os.port) tags,TRUNCATE(avg(his.threads_running),0) threads_running
-FROM mysql_status_history  his
-JOIN db_servers_mysql os ON his.host=os.host and his.port=os.port
+         $data = $this->db->query("select os.tags,TRUNCATE(sum(his.disk_io_writes),0) io_writes,TRUNCATE(avg(his.disk_io_reads),0) io_reads
+FROM os_diskio_history  his
+JOIN db_servers_os os ON his.ip=os.host 
 WHERE his.create_time>=ADDDATE(NOW(),INTERVAL -5 MINUTE)
 GROUP BY os.tags
-ORDER BY threads_running DESC limit 10;")->result_array();
+ORDER BY io_writes DESC limit 10;")->result_array();
          $result = array();
          foreach($data as $item){
                 $result['category'][] = $item['tags'];
-                $result['series']['threads_running'][] = $item['threads_running'];
-               # $result['series']['io_reads'][] = $item['io_reads'];
+                $result['series']['io_writes'][] = $item['io_writes'];
+                $result['series']['io_reads'][] = $item['io_reads'];
          }
          $php_json = json_encode($result); 
          print_r($php_json) ;
