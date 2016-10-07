@@ -73,7 +73,7 @@
                     <li <?php if($model=='redis'){ echo "class='active'";} ?>><a href="<?php echo site_url('redis/index'); ?>" class="hidden-phone visible-tablet visible-desktop" role="button">Redis</a></li>
                     <li <?php if($model=='memcache'){ echo "class='active'";} ?>><a href="<?php echo site_url('memcache/index'); ?>" class="hidden-phone visible-tablet visible-desktop" role="button">Memcache</a></li>
                    <li <?php if($model=='sqlserver'){ echo "class='active'";} ?>><a href="<?php echo site_url('sqlserver/index'); ?>" class="hidden-phone visible-tablet visible-desktop" role="button">SQLServer</a></li>
-                    <li <?php if($model=='backup'){ echo "class='active'";} ?>><a href="<?php echo site_url('backup/index'); ?>" class="hidden-phone visible-tablet visible-desktop" role="button">备份</a></li>
+                    <li <?php if($model=='backup'){ echo "class='active'";} ?>><a href="<?php echo site_url('backup/index'); ?>" class="hidden-phone visible-tablet visible-desktop" role="button">Backup</a></li>
                     <li <?php if($model=='os'){ echo "class='active'";} ?>><a href="<?php echo site_url('os/index'); ?>" class="hidden-phone visible-tablet visible-desktop" role="button">OS</a></li>
                     <li <?php if($model=='alarm'){ echo "class='active'";} ?>><a href="<?php echo site_url('alarm/index'); ?>" class="hidden-phone visible-tablet visible-desktop" role="button"><?php echo $this->lang->line('alarm'); ?></a></li>
                     <li <?php if($model=='settings'){ echo "class='active'";} ?>><a href="<?php echo site_url('settings/index'); ?>" class="hidden-phone visible-tablet visible-desktop" role="button"><?php echo $this->lang->line('settings'); ?></a></li>

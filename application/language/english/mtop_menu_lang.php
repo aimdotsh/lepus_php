@@ -6,6 +6,8 @@ $lang['_Settings'] = 'Settings';
 $lang['_Machine Room'] = 'Machine Room';
 $lang['_Application'] = 'Application';
 $lang['_Servers'] = 'Servers';
+$lang['_SQLServer'] = 'SQLServer';
+$lang['_Memcache'] = 'Memcache';
 $lang['_MySQL'] = 'MySQL';
 $lang['_Oracle'] = 'Oracle';
 $lang['_MongoDB'] = 'MongoDB';
@@ -43,6 +45,8 @@ $lang['_Persistence Monitor'] = 'Persistence Monitor';
 $lang['_Memcache Panel'] = 'Memcache Monitor';
 $lang['_Memcache Monitor'] = 'Memcache Monitor';
 
+$lang['_SQLServer Monitor'] = 'SQLServer Monitor';
+
 $lang['_Alarm Panel'] = 'Alarm Panel';
 $lang['_Alarm List'] = 'Alarm List';
 
@@ -66,7 +70,8 @@ $lang['_Menu'] = 'Menu';
 $lang['_Privilege'] = 'Privilege';
 $lang['_Authorization'] = 'Authorization';
 
-
+$lang['_Backup'] = 'Backup';
+$lang['_Backup list'] = 'Backup List';
 
 
 /* End of file menu_lang.php */
