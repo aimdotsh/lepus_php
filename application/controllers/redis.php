@@ -92,6 +92,8 @@ on `status`.server_id=`server`.id order by used_memory desc limit 10;")->result_
                 $chart_reslut[$i]['expired_keys'] = $dbdata['expired_keys'];
                 $chart_reslut[$i]['evicted_keys'] = $dbdata['evicted_keys'];
 
+                $chart_reslut[$i]['used_memory'] = ROUND ($dbdata['used_memory']/1024/1024);
+
                 $chart_reslut[$i]['rejected_connections'] = $dbdata['rejected_connections'];
                 $chart_reslut[$i]['total_commands_processed'] = $dbdata['total_commands_processed'];
                 $chart_reslut[$i]['instantaneous_ops_per_sec'] = $dbdata['instantaneous_ops_per_sec'];
