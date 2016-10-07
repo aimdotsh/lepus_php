@@ -117,9 +117,9 @@
                         <hr>
 
                         <!-- Purchase a site license to remove this link from the footer: http://www.portnine.com/bootstrap-themes -->
-                        <p class="pull-right">Power by <a href="http://www.lepus.cc" target="_blank">Lepus</a></p>
+                        <p class="pull-right">Power by <a href="https://github.com/speedocjx" target="_blank">Lepus</a></p>
 
-                        <p>&copy; 2014 <a href="http://www.lepus.cc" target="_blank">Lepus</a>(天兔数据库监控系统)</p>
+                        <p>&copy; 2016 <a href="https://github.com/speedocjx" target="_blank">Lepus</a>(天兔数据库监控系统)</p>
                     </footer>
 
     </div>
