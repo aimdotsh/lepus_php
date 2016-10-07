@@ -1,13 +1,12 @@
 <div class="container-fluid" style="padding:0px;">
  <div class="row-fluid">
  
- <div id="cpu" style="height:270px; width:32.8%;border:1px solid #ccc;padding:0px;margin-left:3px;margin-top:5px; float:left; background-color:#30536f"></div>
- <div id="net" style="height:270px; width:32.8%;border:1px solid #ccc;padding:0px;margin-left:3px;margin-top:5px; float:left; background-color:#30536f"></div>
- <div id="io" style="height:270px; width:32.8%;border:1px solid #ccc;padding:0px;margin-left:3px;margin-top:5px; float:left; background-color:#30536f"></div>
+ <div id="mysql_connect" style="height:270px; width:49.4%;border:1px solid #ccc;padding:0px;margin-left:3px;margin-top:5px; float:left; background-color:#30536f"></div>
+ <div id="mysql_delay" style="height:270px; width:49.4%;border:1px solid #ccc;padding:0px;margin-left:3px;margin-top:5px; float:left; background-color:#30536f"></div>
+ <div id="mysql_act_thread" style="height:270px; width:49.4%;border:1px solid #ccc;padding:0px;margin-left:3px;margin-top:5px; float:left; background-color:#30536f"></div>
+ <div id="redis_mem" style="height:270px; width:49.4%;border:1px solid #ccc;padding:0px;margin-left:3px;margin-top:5px; float:left; background-color:#30536f"></div>
  <div id="db" style="height:270px; width:32.8%;border:1px solid #ccc;padding:0px;margin-left:3px;margin-top:5px; float:left; background-color:#30536f"></div>
- <div id="alarm" style="height:270px; width:66%;border:1px solid #ccc;padding:0px;margin-left:3px;margin-top:5px; float:left; background-color:#30536f;color:#FFF;">
-  
- </div>
+ <div id="alarm" style="height:270px; width:66%;border:1px solid #ccc;padding:0px;margin-left:3px;margin-top:5px; float:left; background-color:#30536f;color:#FFF;"></div>
 
 
 <script type="text/javascript">
@@ -22,16 +21,16 @@
 <!-- cpu -->
 <script type="text/javascript">
 
-function echarts_load_cpu(){
+function echarts_mysql_connect(){
 
-    var myChart_cpu = echarts.init(document.getElementById('cpu'));
+    var myChart_cpu = echarts.init(document.getElementById('mysql_connect'));
     
     var options_cpu = {
         
             backgroundColor: '#30536f',
         
         title : {
-            text: 'CPU Top10',
+            text: 'MySQL connections Top10',
             subtext: '',
             x: 'center',
             textStyle: {
@@ -46,7 +45,7 @@ function echarts_load_cpu(){
         
         },
         legend: {
-            data:['Used','Idle'],
+            data:['THREAD_CONNECTED'],
             x: 'left',
             textStyle: {
                 fontSize: 8, 
@@ -87,10 +86,7 @@ function echarts_load_cpu(){
             {
                 type : 'value',
                 splitArea : {show : true},
-                min: '0',
-                max: '100',
                 axisLabel : {
-                    formatter: '{value}%',
                     textStyle: { 
                         color:'#FFFFFF',
                     }
@@ -99,24 +95,11 @@ function echarts_load_cpu(){
         ],
         series : [
             {
-                name:'Used',
+                name:'THREAD_CONNECTED',
                 type:'bar',
                 itemStyle: {
                     normal: {
                         color: '#f13a16',
-                    },
-                    
-                },
-                data:[]
-            },
-            
-			
-			{
-                name:'Idle',
-                type:'bar',
-                itemStyle: {
-                    normal: {
-                        color: '#33CC00',
                     },
                     
                 },
@@ -128,13 +111,12 @@ function echarts_load_cpu(){
     
     $.ajax({   
         type:"POST",   
-        url:"<?php echo site_url('screen/ajax_get_cpu')?>",
+        url:"<?php echo site_url('screen/ajax_mysql_connect')?>",
         dataType: "json", //返回数据形式为json            
         success:function(result){
             if(result){
                 options_cpu.xAxis[0].data = result.category;
-                options_cpu.series[0].data=result.series.used;
-				options_cpu.series[1].data=result.series.idle;
+                options_cpu.series[0].data=result.series.threads_connect;
                 myChart_cpu.setOption(options_cpu);
             }
             
@@ -144,9 +126,8 @@ function echarts_load_cpu(){
         }
     });
 }
-
-echarts_load_cpu();
-setInterval("echarts_load_cpu()",30*1000);
+echarts_mysql_connect();
+setInterval("echarts_mysql_connect()",30*1000);
 
 
 </script>
@@ -155,9 +136,9 @@ setInterval("echarts_load_cpu()",30*1000);
 <!-- net -->
 <script type="text/javascript">
 
-function echarts_load_net(){
+function echarts_mysql_delay(){
 
-    var myChart_net = echarts.init(document.getElementById('net'));
+    var myChart_net = echarts.init(document.getElementById('mysql_delay'));
     
     var options_net = {
         
@@ -187,7 +168,7 @@ function echarts_load_net(){
             }
         },
         grid: {
-            x: '45px',
+            x: '65px',
             x2: '20px',
             y: '40px',
             y2: '75px',
@@ -221,7 +202,8 @@ function echarts_load_net(){
                 type : 'value',
                 splitArea : {show : true},
                 axisLabel : {
-                    textStyle: {
+                 formatter: '{value}s',
+                 textStyle: {
                         color:'#FFFFFF',
                     }
                 }
@@ -239,16 +221,11 @@ function echarts_load_net(){
                 },
                 data:[1,2]
             },
-            
-        
-           
         ]
     };
- 
-
     $.ajax({   
         type:"POST",   
-        url:"<?php echo site_url('screen/ajax_get_net')?>",
+        url:"<?php echo site_url('screen/ajax_mysql_delay')?>",
         dataType: "json", //返回数据形式为json            
         success:function(result){
             if(result){
@@ -266,8 +243,8 @@ function echarts_load_net(){
 
 }
 
-echarts_load_net();
-setInterval("echarts_load_net()",30*1000);
+echarts_mysql_delay();
+setInterval("echarts_mysql_delay()",30*1000);
  
 
 </script>
@@ -277,9 +254,9 @@ setInterval("echarts_load_net()",30*1000);
 <!-- io -->
 <script type="text/javascript">
 
-function echarts_load_io(){
+function echarts_mysql_thread(){
 
-    var myChart_io = echarts.init(document.getElementById('io'));
+    var myChart_io = echarts.init(document.getElementById('mysql_act_thread'));
     
     var options_io = {
         
@@ -331,7 +308,7 @@ function echarts_load_io(){
                 data : ['a','b'],
                 name : '',
                 axisLabel : {
-                    rotate: '20',
+                    rotate: '45',
                     textStyle: {
                      fontSize: 4,
                      color:'#FFFFFF',
@@ -369,7 +346,7 @@ function echarts_load_io(){
 
     $.ajax({   
         type:"POST",   
-        url:"<?php echo site_url('screen/ajax_get_diskio')?>",
+        url:"<?php echo site_url('screen/ajax_mysql_thread')?>",
         dataType: "json", //返回数据形式为json            
         success:function(result){
             if(result){
@@ -386,8 +363,8 @@ function echarts_load_io(){
 
 }
 
-echarts_load_io();
-setInterval("echarts_load_io()",30*1000);
+echarts_mysql_thread();
+setInterval("echarts_mysql_thread()",30*1000);
  
 
 </script>
@@ -556,3 +533,123 @@ function load_alarm(){
 load_alarm();
 setInterval("load_alarm()",30*1000);
 </script>
+
+
+
+  <script type="text/javascript">
+
+   function echarts_redis_mem(){
+
+    var myChart_rmem = echarts.init(document.getElementById('redis_mem'));
+
+    var options_mem = {
+
+     backgroundColor: '#30536f',
+
+     title : {
+      text: 'REDIS MEMUSAGE TOP 10',
+      subtext: '',
+      x: 'center',
+      textStyle: {
+       fontSize: 14,
+       fontWeight: 'bolder',
+       color: '#FFFFFF'
+      }
+     },
+     tooltip : {
+      trigger: 'axis',
+      color : ['#FFFFFF','#22bb22','#4b0082','#d2691e'],
+
+     },
+     legend: {
+      data:['MEM_USAGE'],
+      x: 'left',
+      textStyle: {
+       fontSize: 8,
+       color: '#FFFFFF'
+      }
+     },
+     grid: {
+      x: '65px',
+      x2: '20px',
+      y: '40px',
+      y2: '75px',
+     },
+     toolbox: {
+      show : true,
+      color : ['#FFFFFF','#FFFFFF','#FFFFFF','#FFFFFF'],
+      feature : {
+
+       magicType : {show: true, type: ['line', 'bar']},
+       restore : {show: true},
+       saveAsImage : {show: true}
+      }
+     },
+     calculable : true,
+     xAxis : [
+      {
+       type : 'category',
+       data : ['a','b'],
+       name : '',
+       axisLabel : {
+        rotate: '45',
+        textStyle: {
+         fontSize: 4,
+         color:'#FFFFFF',
+        }
+       }
+      }
+     ],
+     yAxis : [
+      {
+       type : 'value',
+       splitArea : {show : true},
+       axisLabel : {
+        formatter: '{value}MB',
+        textStyle: {
+         color:'#FFFFFF',
+        }
+       }
+      }
+     ],
+     series : [
+      {
+       name:'MEM_USAGE',
+       type:'bar',
+       itemStyle: {
+        normal: {
+         color: '#660000',
+        },
+
+       },
+       data:[1,2]
+      },
+
+     ]
+    };
+
+
+    $.ajax({
+     type:"POST",
+     url:"<?php echo site_url('screen/ajax_get_redismem')?>",
+     dataType: "json", //返回数据形式为json
+     success:function(result){
+      if(result){
+       options_mem.xAxis[0].data = result.category;
+       options_mem.series[0].data=result.series.memory_usage;
+       myChart_rmem.setOption(options_mem);
+      }
+
+     },
+     error: function (errorMsg) {
+      $('#io').html("ajax load data error!");
+     }
+    });
+
+   }
+
+   echarts_redis_mem();
+   setInterval("echarts_redis_mem()",30*1000);
+
+
+  </script>

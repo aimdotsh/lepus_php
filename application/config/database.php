@@ -48,7 +48,7 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = '127.0.0.1';
+$db['default']['hostname'] = '10.1.70.222';
 $db['default']['port']     = '3306';
 $db['default']['username'] = 'lepus_user';
 $db['default']['password'] = 'lepus_user';

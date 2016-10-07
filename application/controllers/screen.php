@@ -42,30 +42,34 @@ on `status`.server_id=`server`.id order by threads_running desc limit 10;")->res
     }
 
 
-    function ajax_get_cpu(){
-         $data = $this->db->query("SELECT os.tags, (100-SUBSTRING_INDEX(avg(cpu_idle_time),'.',1)) cpu_used_time,SUBSTRING_INDEX(avg(cpu_idle_time),'.',1) cpu_idle_time 
-FROM (SELECT * FROM os_status_history WHERE create_time>=ADDDATE(NOW(),INTERVAL -5 MINUTE) order BY create_time DESC) his
-JOIN db_servers_os os ON his.ip=os.host and his.snmp=1
-group by ip order by cpu_idle_time asc limit 10;")->result_array();
+    function ajax_mysql_connect(){
+         $data = $this->db->query("select concat (substring_index(os.host,'.',-2),':', os.port) tags, his.threads_connected threads_connect
+FROM mysql_status  his
+JOIN db_servers_mysql os ON his.host=os.host and his.port=os.port
+WHERE os.monitor='1'
+ORDER BY threads_connect DESC limit 10;")->result_array();
          $result = array();
          foreach($data as $item){
                 $result['category'][] = $item['tags'];
-                $result['series']['used'][] = $item['cpu_used_time'];
-                $result['series']['idle'][] = $item['cpu_idle_time'];
+                $result['series']['threads_connect'][] = $item['threads_connect'];
          }
          $php_json = json_encode($result); 
          print_r($php_json) ;
 
     }
-    
-
-
-   function ajax_get_net(){
-         $data = $this->db->query("select concat (substring_index(os.host,'.',-2),':', os.port) tags,TRUNCATE(avg(his.delay),0) delay
-FROM mysql_replication_history  his
+/*
+select concat (substring_index(os.host,'.',-2),':', os.port) tags,TRUNCATE(avg(his.threads_connected),0) threads_connect
+FROM mysql_status_history  his
 JOIN db_servers_mysql os ON his.host=os.host and his.port=os.port
-WHERE his.create_time>=ADDDATE(NOW(),INTERVAL -5 MINUTE) and his.is_slave='1' and delay is not null
+WHERE his.create_time>=ADDDATE(NOW(),INTERVAL -5 MINUTE)
 GROUP BY os.tags
+ORDER BY threads_connect DESC limit 10;
+*/
+   function ajax_mysql_delay(){
+         $data = $this->db->query("select concat (substring_index(os.host,'.',-2),':', os.port) tags, his.delay  delay
+FROM mysql_replication  his
+JOIN db_servers_mysql os ON his.host=os.host and his.port=os.port
+WHERE  os.monitor='1' and his.is_slave='1' and delay is not null
 ORDER BY delay DESC limit 10")->result_array();
          $result = array();
          foreach($data as $item){
@@ -78,12 +82,11 @@ ORDER BY delay DESC limit 10")->result_array();
     }
 
 
-    function ajax_get_diskio(){
-         $data = $this->db->query("select concat (substring_index(os.host,'.',-2),':', os.port) tags,TRUNCATE(avg(his.threads_running),0) threads_running
-FROM mysql_status_history  his
+    function ajax_mysql_thread(){
+         $data = $this->db->query("select concat (substring_index(os.host,'.',-2),':', os.port) tags, his.threads_running threads_running
+FROM mysql_status  his
 JOIN db_servers_mysql os ON his.host=os.host and his.port=os.port
-WHERE his.create_time>=ADDDATE(NOW(),INTERVAL -5 MINUTE)
-GROUP BY os.tags
+WHERE  os.monitor='1'
 ORDER BY threads_running DESC limit 10;")->result_array();
          $result = array();
          foreach($data as $item){
@@ -211,6 +214,24 @@ ORDER BY threads_running DESC limit 10;")->result_array();
 
     }
 
+    function ajax_get_redismem(){
+        $data = $this->db->query("select concat (substring_index(os.host,'.',-2),':', os.port) tags, round(his.used_memory/1024/1024,0) memory_usage
+FROM redis_status  his
+JOIN db_servers_redis os ON his.host=os.host and his.port=os.port
+WHERE  os.monitor='1'  
+ORDER BY memory_usage DESC limit 10;")->result_array();
+        $result = array();
+        foreach($data as $item){
+            $result['category'][] = $item['tags'];
+            $result['series']['memory_usage'][] = $item['memory_usage'];
+
+        }
+        $php_json = json_encode($result);
+        print_r($php_json) ;
+
+    }
+
+
     function ajax_get_mongodb(){
          $data = $this->db->query("select tags,connections_current from mongodb_status status where status.connect=1  order by status.connections_current desc limit 10;")->result_array();
          $result = array();
@@ -219,7 +240,7 @@ ORDER BY threads_running DESC limit 10;")->result_array();
                 $result['series']['connections_current'][] = $item['connections_current'];
 
          }
-         $php_json = json_encode($result); 
+         $php_json = json_encode($result);
          print_r($php_json) ;
 
     }
