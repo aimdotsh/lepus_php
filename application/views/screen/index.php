@@ -286,7 +286,7 @@ function echarts_load_io(){
             backgroundColor: '#30536f',
         
         title : {
-            text: 'Thread running Top10',
+            text: 'MySQL Thread running Top10',
             subtext: '',
             x: 'center',
             textStyle: {
