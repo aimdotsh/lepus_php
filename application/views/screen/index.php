@@ -310,7 +310,6 @@ function echarts_mysql_thread(){
                 axisLabel : {
                     rotate: '45',
                     textStyle: {
-                     fontSize: 4,
                      color:'#FFFFFF',
                     }
                 }
@@ -565,7 +564,6 @@ setInterval("load_alarm()",30*1000);
       data:['MEM_USAGE'],
       x: 'left',
       textStyle: {
-       fontSize: 8,
        color: '#FFFFFF'
       }
      },
@@ -594,7 +592,7 @@ setInterval("load_alarm()",30*1000);
        axisLabel : {
         rotate: '45',
         textStyle: {
-         fontSize: 4,
+         fontSize: 12,
          color:'#FFFFFF',
         }
        }
