@@ -9,3 +9,5 @@
 
 
 ![image](https://github.com/speedocjx/myfile/blob/master/redis_mem.jpg)
+
+![image](https://github.com/speedocjx/myfile/blob/master/mysql_multimaster.jpg)
