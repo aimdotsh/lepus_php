@@ -1,10 +1,13 @@
 # lepus_php
 -- based on lepus3.6
+
 --php part
 
 --fixing some bug 
 
 --adding redis memory usage part
+
+-- the grafana module can be found in lepus_python dir
 
 ![image](https://github.com/speedocjx/myfile/blob/master/lepus_mon.jpg)
 
